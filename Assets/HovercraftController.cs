@@ -12,6 +12,8 @@ public class HovercraftController : MonoBehaviour
     [Header("Hovering")]
     public float hoverHeight = 1.5f;
     public float hoverForce = 10f;
+    public float quiverAmount = 0.15f;
+    public float quiverSpeed = 3f;
 
     private Rigidbody rb;
 
@@ -39,8 +41,10 @@ public class HovercraftController : MonoBehaviour
     {
         // W = forward, S = backward
         float input = Input.GetAxis("Vertical");
+        Debug.Log("Vertical input: " + input);
 
-        Vector3 force = transform.forward * input * acceleration;
+        Vector3 force =
+            transform.forward * input * acceleration;
 
         rb.AddForce(force, ForceMode.Acceleration);
 
@@ -92,8 +96,11 @@ public class HovercraftController : MonoBehaviour
             terrain.SampleHeight(position)
             + terrain.transform.position.y;
 
+        float quiver =
+            Mathf.Sin(Time.time * quiverSpeed) * quiverAmount;
+
         float desiredHeight =
-            terrainHeight + hoverHeight;
+            terrainHeight + hoverHeight + quiver;
 
         float heightDifference =
             desiredHeight - position.y;
